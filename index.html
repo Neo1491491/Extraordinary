@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>我的第一個 LIFF</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+    <h1>你好，<span id="userName">載入中...</span></h1>
+    <button onclick="sendHello()">發送打招呼訊息</button>
+
+    <script>
+        async function main() {
+            // 1. 初始化 LIFF
+            await liff.init({ liffId: "你的_LIFF_ID" });
+
+            // 2. 判斷是否登入
+            if (!liff.isLoggedIn()) {
+                liff.login(); // 引導登入
+            } else {
+                // 3. 取得使用者資料
+                const profile = await liff.getProfile();
+                document.getElementById("userName").innerText = profile.displayName;
+            }
+        }
+
+        // 發送訊息功能
+        async function sendHello() {
+            if (liff.isInClient()) { // 確保是在 LINE App 內開啟
+                await liff.sendMessages([
+                    { type: 'text', text: '這是我從 LIFF 發送的訊息！' }
+                ]);
+                alert("訊息已發送");
+            }
+        }
+
+        main();
+    </script>
+</body>
+</html>
